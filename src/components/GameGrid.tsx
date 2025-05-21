@@ -1,12 +1,11 @@
-import type { GamesResponse } from '../models/fetch-game-types'
-import { Text, SimpleGrid } from '@chakra-ui/react'
+import { Text, SimpleGrid, Spinner } from '@chakra-ui/react'
 import GameCard from './GameCard'
-import useFetch from './hooks/useFetch'
+import useGames from './hooks/useGames';
 
 const GameGrid = () => {
-    const { data, error } = useFetch<GamesResponse>('/games');
-    return (
-        <>
+    const { data: games, error, isLoading } = useGames();
+    return (isLoading) ? <Spinner /> :
+        (<>
             {error ? (
                 <Text color="red" fontSize={"2.5rem"}>{error}</Text>
             ) : (
@@ -18,11 +17,10 @@ const GameGrid = () => {
                     columns={{ base: 1, sm: 2, md: 3 }}
                     gap={5}
                 >
-                    {data?.results.map(g => <GameCard key={g.id} game={g} />)}
+                    {games?.map(g => <GameCard key={g.id} game={g} />)}
                 </SimpleGrid>
             )}
-        </>
-    );
+        </>)
 }
 
 export default GameGrid

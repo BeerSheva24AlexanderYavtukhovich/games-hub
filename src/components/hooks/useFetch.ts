@@ -1,19 +1,21 @@
-// hooks/useFetch.ts
-import { useEffect, useState } from 'react';
-import { AxiosError } from 'axios';
-import apiClient from '../../services/api-client';
+import { useEffect, useState } from "react";
+import apiClient from "../../services/api-client";
+import type { AxiosError } from "axios";
+import type DataResponse from "../../models/data-response";
 
-function useFetch<T>(url: string) {
-  const [data, setData] = useState<T | null>(null);
+export default function useFetch<T>(endpoint: string): { data: T[], error: string, isLoading: boolean } {
+  const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    apiClient.get<T>(url)
-      .then((res) => setData(res.data))
-      .catch((err: AxiosError) => setError(err.message));
-  }, [url]);
+    apiClient.get<DataResponse<T>>(endpoint)
+      .then((res) => setData(res.data.results))
+      .catch((err: AxiosError) => setError(err.message))
+      .finally(() => setIsLoading(false));
+    setIsLoading(true)
 
-  return { data, error };
+  }, []);
+
+  return { data, error, isLoading }
 }
-
-export default useFetch;
