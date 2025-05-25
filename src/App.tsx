@@ -1,4 +1,4 @@
-import { Grid, GridItem, Spinner, Stack } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Spinner, Stack } from '@chakra-ui/react'
 import './App.css'
 import Nav from './components/Nav'
 import GameGrid from './components/GameGrid'
@@ -7,8 +7,9 @@ import { useState } from 'react'
 
 import usePlatforms from './components/hooks/usePlatforms'
 import PlatformMenu from './components/PlatformMenu'
+
 import type GameQuery from './models/game-query'
-import { text } from 'framer-motion/client'
+import OrderingMenu from './components/OrderingMenu'
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
@@ -18,23 +19,35 @@ function App() {
       <Grid templateAreas={{
         base: `'nav' 'main'`,
         md: `'nav nav' 'aside main'`
-      }} >
+      }}
+        gridTemplateColumns={{
+    base: '1fr',
+    md: 'auto 1fr' 
+  }} >
         <GridItem area="nav" >
-          <Nav searchSubmitter={(text) => setGameQuery({...gameQuery, search: text})}></Nav>
+          <Nav searchSubmitter={(text) => setGameQuery({ ...gameQuery, search: text })}></Nav>
         </GridItem>
         <Stack hideBelow={"md"}>
-          <GridItem area="aside" paddingX={5}>
+          <GridItem area="aside" paddingX={5} >
             <GenreList
               selectedGenre={gameQuery.genreName}
               onSelectGenre={(genreName: string | null) =>
                 setGameQuery({ ...gameQuery, genreName })
               }
             />
+
           </GridItem>
         </Stack>
-        <GridItem area="main" paddingX="5" >
-          <PlatformMenu onSelectPlatform={(platform) => setGameQuery({ ...gameQuery, platform })}
+        <GridItem area="main" paddingX="5">
+          <Box display={'flex'} gap={2} width="100%"><PlatformMenu onSelectPlatform={(platform) => setGameQuery({ ...gameQuery, platform })}
             selectedPlatform={gameQuery.platform} />
+          <OrderingMenu
+            selectedOrdering={gameQuery.ordering}
+            onSelectOrdering={(ordering: string) =>
+              setGameQuery({ ...gameQuery, ordering })
+            }
+          />
+          </Box>
           <GameGrid gameQuery={gameQuery} /></GridItem>
       </Grid>
     </>

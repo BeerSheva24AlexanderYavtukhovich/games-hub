@@ -1,0 +1,9 @@
+[
+  { "value": "name", "label": "Name" },
+  { "value": "rating", "label": "Rating" },
+  { "value": "metacritic", "label": "Metacritic" },
+  { "value": "released", "label": "Date released" },
+  { "value": "added", "label": "Date added" },
+  { "value": "created", "label": "Date created" },
+  { "value": "updated", "label": "Date updated" }
+]

@@ -23,7 +23,7 @@ const GameCard: React.FC<Props> = ({ game }) => {
         <Card.Footer d="flex" flexDir="column" alignItems="flex-start">
             <HStack justifyContent={"space-between"} width="100%">
                 <Text >{game.parent_platforms.map(p => p.platform.name).join("; ")}</Text>
-                <Badge {...getColors(game.metacritic)}>{game.metacritic}</Badge>
+                {game.metacritic && <Badge {...getColors(game.metacritic)}>{game.metacritic}</Badge>}
             </HStack>
             <HStack mt={2}>
                 {[...Array(5)].map((_, i) => {

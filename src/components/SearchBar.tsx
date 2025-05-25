@@ -20,6 +20,7 @@ const SearchBar: FC<Props> = ({ searchSubmitter }) => {
                     ref={inputElem}
                     placeholder={"Search games"}
                     onFocus={() => inputElem.current?.value && (inputElem.current.value="")}
+                    width={400}
                 />
             </InputGroup>
         </Box>
