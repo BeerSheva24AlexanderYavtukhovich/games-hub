@@ -1,36 +1,73 @@
-import { Button, Menu, Portal } from '@chakra-ui/react';
-import { FaChevronDown } from 'react-icons/fa';
-
-interface Platform {
-  id: number;
-  name: string;
-}
+import { Button, Menu, Portal, Spinner } from '@chakra-ui/react';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { easeInOut, motion } from 'framer-motion';
+import type ParentPlatform from '../models/parent-platform';
+import { useState } from 'react';
+import usePlatforms from './hooks/usePlatforms';
+import ComponentMotion from './Motion';
 
 interface Props {
-  platforms?: Platform[];
+  selectedPlatform: ParentPlatform | null;
+  onSelectPlatform: (platform: ParentPlatform | null) => void;
 }
 
-const PlatformMenu = ({ platforms }: Props) => {
+const PlatformMenu = ({ selectedPlatform, onSelectPlatform }: Props) => {
+  const { error, isLoading, data: platforms } = usePlatforms();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <Menu.Root>
-      <Menu.Trigger asChild>
-        <Button variant="outline" size="sm">
-          <FaChevronDown />Platforms
-        </Button>
-      </Menu.Trigger>
-      <Portal>
-        <Menu.Positioner>
-          <Menu.Content>
-            {platforms?.map((platform) => (
-              <Menu.Item key={platform.id} value={platform.id.toString()}>
-                {platform.name}
-              </Menu.Item>
-            ))}
-          </Menu.Content>
-        </Menu.Positioner>
-      </Portal>
-    </Menu.Root>
-  );
+
+    <>
+      {
+        isLoading ? (
+          <Spinner></Spinner>
+        ) : (
+          !error && (
+            <Menu.Root>
+              <Menu.Trigger asChild>
+                <Button variant="outline" size="sm" focusRing={"none"} cursor={'pointer'} onClick={() => setIsOpen(!isOpen)}>
+                  {isOpen ? <ComponentMotion duration={0.5} ><FaChevronUp /></ComponentMotion>
+                    : <FaChevronDown />}{selectedPlatform?.name} Platform
+                </Button>
+              </Menu.Trigger>
+              <Portal>
+                <Menu.Positioner>
+                  <ComponentMotion duration={0.5} >
+                    <Menu.Content>
+                      <Menu.Item
+                        key={"p.id"}
+                        onClick={() => {
+                          onSelectPlatform(null);
+                          setIsOpen(false);
+                        }}
+                        value={""}
+                        cursor={'pointer'}
+                      >
+                        All
+                      </Menu.Item>
+                      {platforms.map((p) => (
+                        <Menu.Item
+                          key={p.id}
+                          onClick={() => {
+                            onSelectPlatform(p);
+                            setIsOpen(false);
+                          }}
+                          value={String(p.id)}
+                          cursor={'pointer'}
+                        >
+                          {p.name}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Content>
+                  </ComponentMotion>
+                </Menu.Positioner>
+              </Portal>
+            </Menu.Root>
+          )
+        )}
+    </>
+  )
+
+
 };
 
 export default PlatformMenu;

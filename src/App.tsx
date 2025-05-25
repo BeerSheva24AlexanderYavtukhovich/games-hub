@@ -7,9 +7,11 @@ import { useState } from 'react'
 
 import usePlatforms from './components/hooks/usePlatforms'
 import PlatformMenu from './components/PlatformMenu'
+import type GameQuery from './models/game-query'
+import { text } from 'framer-motion/client'
 
 function App() {
-  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
   const { data: platforms, error, isLoading } = usePlatforms();
   return (isLoading) ? <Spinner /> :
     (<>
@@ -18,19 +20,22 @@ function App() {
         md: `'nav nav' 'aside main'`
       }} >
         <GridItem area="nav" >
-          <Nav></Nav>
+          <Nav searchSubmitter={(text) => setGameQuery({...gameQuery, search: text})}></Nav>
         </GridItem>
         <Stack hideBelow={"md"}>
           <GridItem area="aside" paddingX={5}>
             <GenreList
-              onSelectGenre={(genreName: string) => setSelectedGenre(genreName)}
-              selectedGenre={selectedGenre}
+              selectedGenre={gameQuery.genreName}
+              onSelectGenre={(genreName: string | null) =>
+                setGameQuery({ ...gameQuery, genreName })
+              }
             />
           </GridItem>
         </Stack>
         <GridItem area="main" paddingX="5" >
-          <PlatformMenu platforms={platforms} />
-          <GameGrid selectedGenre={selectedGenre} /></GridItem>
+          <PlatformMenu onSelectPlatform={(platform) => setGameQuery({ ...gameQuery, platform })}
+            selectedPlatform={gameQuery.platform} />
+          <GameGrid gameQuery={gameQuery} /></GridItem>
       </Grid>
     </>
     )
