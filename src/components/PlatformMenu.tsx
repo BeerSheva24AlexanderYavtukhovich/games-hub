@@ -1,6 +1,5 @@
 import { Button, Menu, Portal, Spinner } from '@chakra-ui/react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { easeInOut, motion } from 'framer-motion';
 import type ParentPlatform from '../models/parent-platform';
 import { useState } from 'react';
 import usePlatforms from './hooks/usePlatforms';
@@ -22,7 +21,7 @@ const PlatformMenu = ({ selectedPlatform, onSelectPlatform }: Props) => {
           <Spinner></Spinner>
         ) : (
           !error && (
-            <Menu.Root>
+            <Menu.Root onExitComplete={() => setIsOpen(false)}>
               <Menu.Trigger asChild>
                 <Button variant="outline" size="sm" focusRing={"none"} cursor={'pointer'} onClick={() => setIsOpen(!isOpen)}>
                   {isOpen ? <ComponentMotion duration={0.5} ><FaChevronUp /></ComponentMotion>
@@ -37,7 +36,6 @@ const PlatformMenu = ({ selectedPlatform, onSelectPlatform }: Props) => {
                         key={"p.id"}
                         onClick={() => {
                           onSelectPlatform(null);
-                          setIsOpen(false);
                         }}
                         value={""}
                         cursor={'pointer'}
@@ -49,7 +47,6 @@ const PlatformMenu = ({ selectedPlatform, onSelectPlatform }: Props) => {
                           key={p.id}
                           onClick={() => {
                             onSelectPlatform(p);
-                            setIsOpen(false);
                           }}
                           value={String(p.id)}
                           cursor={'pointer'}
