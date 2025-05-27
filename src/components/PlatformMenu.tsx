@@ -39,7 +39,7 @@ const PlatformMenu = () => {
                       >
                         All
                       </Menu.Item>
-                      {platforms.map((p) => (
+                      {platforms?.map((p) => (
                         <Menu.Item
                           key={p.id}
                           onClick={() => {

@@ -16,9 +16,9 @@ const GenreMenu: FC = () => {
   return (isLoading) ? <Spinner /> :
     (
       <>
-        {error ? (
+        {error?.message ? (
           <Text color="red" fontSize={"2.5rem"}>
-            {error}
+            {error?.message}
           </Text>
         ) : (
           <Menu.Root onExitComplete={() => setIsOpen(false)}>
@@ -42,7 +42,7 @@ const GenreMenu: FC = () => {
                     >
                       All
                     </Menu.Item>
-                    {genres.map((p) => (
+                    {genres?.map((p) => (
                       <Menu.Item
                         key={p.id}
                         onClick={() => {

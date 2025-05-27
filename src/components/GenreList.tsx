@@ -11,9 +11,9 @@ const GenreList: FC = () => {
   return (isLoading) ? <Spinner /> :
     (
       <>
-        {error ? (
+        {error?.message ? (
           <Text color="red" fontSize={"2.5rem"}>
-            {error}
+            {error?.message}
           </Text>
         ) : (
           <List.Root listStyle="none" maxHeight="85vh" overflow="auto">

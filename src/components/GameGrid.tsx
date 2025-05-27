@@ -12,7 +12,7 @@ const GameGrid: FC = () => {
     ) :
         (<>
             {error ? (
-                <Text color="red" fontSize={"2.5rem"}>{error}</Text>
+                <Text color="red" fontSize={"2.5rem"}>{error?.message}</Text>
             ) : (
                 <SimpleGrid
                     paddingEnd={8}
