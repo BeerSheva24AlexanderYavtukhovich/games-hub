@@ -7,16 +7,14 @@ import { useState, useEffect } from 'react';
 import ComponentMotion from './Motion';
 import orderingFields from '../config/order-fields.json';
 import { BiFilter } from 'react-icons/bi';
+import { useGamesQueryStore } from './state-manager/store';
 
 type OrderDirection = 'asc' | 'desc';
 
-interface Props {
-  selectedOrdering: string | null;
-  onSelectOrdering: (ordering: string) => void;
-}
-
-const OrderingMenu = ({ selectedOrdering, onSelectOrdering }: Props) => {
+const OrderingMenu = () => {
   const fields: { value: string; label: string }[] = orderingFields;
+  const selectedOrdering = useGamesQueryStore(s => s.gameQuery.ordering)
+  const setOrder = useGamesQueryStore(s => s.setOrdering)
   const currentDirection: OrderDirection = selectedOrdering?.startsWith('-') ? 'desc' : 'asc';
   const currentFieldObj = fields.find(f => f.value === selectedOrdering?.replace(/^-/, '')) || fields[0];
   
@@ -25,7 +23,7 @@ const OrderingMenu = ({ selectedOrdering, onSelectOrdering }: Props) => {
 
   const handleSelect = (field: string, direction: OrderDirection) => {
     const ordering = direction === 'desc' ? `-${field}` : field;
-    onSelectOrdering(ordering);
+    setOrder(ordering);
   };
 
   useEffect(() => {

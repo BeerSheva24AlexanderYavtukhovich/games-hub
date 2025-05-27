@@ -2,13 +2,11 @@ import type { FC } from "react";
 import type { Genre, } from "../models/fetch-genre-types";
 import { Text, List, HStack, Avatar, Spinner, Button } from "@chakra-ui/react";
 import useGenres from "./hooks/useGenres";
+import { useGamesQueryStore } from "./state-manager/store";
 
-interface Props {
-  onSelectGenre: (genre: string | null) => void
-  selectedGenre: string | null;
-}
-
-const GenreList: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
+const GenreList: FC = () => {
+  const selectedGenre = useGamesQueryStore(s => s.gameQuery.genreName);
+  const setGenre = useGamesQueryStore(s => s.setGenre)
   const { data: genres, error, isLoading } = useGenres();
   return (isLoading) ? <Spinner /> :
     (
@@ -30,7 +28,7 @@ const GenreList: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
                   fontWeight={!selectedGenre ? "bold" : "normal"}
                   variant={"outline"}
                   borderWidth="0"
-                  onClick={() => onSelectGenre(null)}
+                  onClick={() => setGenre(null)}
                 >
                   All Genres
                 </Button>
@@ -45,7 +43,7 @@ const GenreList: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
                   </Avatar.Root>
                   <Button
                     fontWeight={g.slug === selectedGenre ? "bold" : "normal"}
-                    onClick={() => onSelectGenre(g.slug)}
+                    onClick={() => setGenre(g.slug)}
                     cursor="pointer"
                     variant={"outline"}
                     borderWidth="0"

@@ -2,14 +2,9 @@ import { Text, SimpleGrid, Spinner, Box } from '@chakra-ui/react'
 import GameCard from './GameCard'
 import useGames from './hooks/useGames';
 import type { FC } from 'react';
-import type GameQuery from '../models/game-query';
 
-interface Props{
-        gameQuery: GameQuery
-}
-
-const GameGrid: FC<Props> = ({ gameQuery }) => {
-    const { data: games, error, isLoading } = useGames(gameQuery);
+const GameGrid: FC = () => {
+    const { data: games, error, isLoading } = useGames();
     return (isLoading) ? (
       <Box display="flex" justifyContent="center" alignItems="center" height="90vh">
         <Spinner size="xl" />

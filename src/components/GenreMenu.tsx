@@ -3,15 +3,16 @@ import { Text, Spinner, Button, Menu, Portal } from "@chakra-ui/react";
 import useGenres from "./hooks/useGenres";
 import ComponentMotion from "./Motion";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useGamesQueryStore } from "./state-manager/store";
 
-interface Props {
-  onSelectGenre: (genre: string | null) => void
-  selectedGenre: string | null;
-}
 
-const GenreMenu: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
+
+const GenreMenu: FC = () => {
+  const selectedGenre = useGamesQueryStore(s => s.gameQuery.genreName);
+  const setGenre = useGamesQueryStore(s => s.setGenre)
   const { data: genres, error, isLoading } = useGenres();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (isLoading) ? <Spinner /> :
     (
       <>
@@ -24,7 +25,7 @@ const GenreMenu: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
             <Menu.Trigger asChild>
               <Button variant="outline" size="sm" focusRing={"none"} cursor={'pointer'} onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <ComponentMotion duration={0.5} ><FaChevronUp /></ComponentMotion>
-                  : <FaChevronDown />}Genre {selectedGenre} 
+                  : <FaChevronDown />}Genre {selectedGenre}
               </Button>
             </Menu.Trigger>
             <Portal>
@@ -34,7 +35,7 @@ const GenreMenu: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
                     <Menu.Item
                       key={"p.id"}
                       onClick={() => {
-                        onSelectGenre(null);
+                        setGenre(null);
                       }}
                       value={""}
                       cursor={'pointer'}
@@ -45,7 +46,7 @@ const GenreMenu: FC<Props> = ({ onSelectGenre, selectedGenre }) => {
                       <Menu.Item
                         key={p.id}
                         onClick={() => {
-                          onSelectGenre(p.slug);
+                          setGenre(p.slug);
                         }}
                         value={String(p.id)}
                         cursor={'pointer'}
