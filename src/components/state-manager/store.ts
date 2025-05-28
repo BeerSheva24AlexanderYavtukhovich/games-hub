@@ -14,7 +14,6 @@ interface GamesQueryStore {
   setPlatform: (platform: ParentPlatform | null) => void;
   setSearch: (search: string | null) => void;
   setOrdering: (ordering: string | null) => void;
-  setQuery: (newQuery: Partial<GameQuery>) => void;
 }
 
 export const useGamesQueryStore = create<GamesQueryStore>((set) => ({
@@ -39,9 +38,5 @@ export const useGamesQueryStore = create<GamesQueryStore>((set) => ({
   setOrdering: (ordering) =>
     set((state) => ({
       gameQuery: { ...state.gameQuery, ordering },
-    })),
-  setQuery: (newQuery) =>
-    set((state) => ({
-      gameQuery: { ...state.gameQuery, ...newQuery },
-    })),
+    }))
 }));
