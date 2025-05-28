@@ -25,11 +25,17 @@ export const useGamesQueryStore = create<GamesQueryStore>((set) => ({
   },
   setGenre: (genreName) =>
     set((state) => ({
-      gameQuery: state.gameQuery.genreName === genreName? state.gameQuery :{ ...state.gameQuery, genreName },
+      gameQuery:
+        state.gameQuery.genreName === genreName
+          ? state.gameQuery
+          : { ...state.gameQuery, genreName, search: null },
     })),
   setPlatform: (platform) =>
     set((state) => ({
-      gameQuery: state.gameQuery.platform === platform? state.gameQuery : {...state.gameQuery, platform },
+      gameQuery:
+        state.gameQuery.platform === platform
+          ? state.gameQuery
+          : { ...state.gameQuery, platform },
     })),
   setSearch: (search) =>
     set((state) => ({
@@ -37,6 +43,9 @@ export const useGamesQueryStore = create<GamesQueryStore>((set) => ({
     })),
   setOrdering: (ordering) =>
     set((state) => ({
-      gameQuery: { ...state.gameQuery, ordering },
-    }))
+      gameQuery:
+        state.gameQuery.platform === ordering
+          ? state.gameQuery
+          : { ...state.gameQuery, ordering },
+    })),
 }));
